@@ -1,85 +1,17 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
 import './App.css';
-import Description from '../description/Description.jsx';
-import Options from '../options/Options.jsx';
-import Notification from '../notification/Notification.jsx';
-import Feedback from '../feedback/Feedback.jsx';
+import initialContacts from '../../initialContacts.json';
+//import ContactForm from '../contactform/ContactForm.jsx';
+//import SearchBox from '../searchbox/SearchBox.jsx';
+import ContactList from '../contactlist/ContactList.jsx';
 
 function App() {
-  const [feedback, setFeedback] = useState(() => {
-    const savedFeedbackObject = window.localStorage.getItem(
-      'saved-feedback-object'
-    );
-    if (savedFeedbackObject !== null) {
-      return JSON.parse(savedFeedbackObject);
-    }
-    return {
-      good: 0,
-      neutral: 0,
-      bad: 0,
-    };
-  });
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      'saved-feedback-object',
-      JSON.stringify(feedback)
-    );
-  }, [feedback]);
-
-  const updateFeedback = feedbackType => {
-    if (feedbackType === 'good') {
-      setFeedback({
-        ...feedback,
-        good: feedback.good + 1,
-      });
-    } else if (feedbackType === 'neutral') {
-      setFeedback({
-        ...feedback,
-        neutral: feedback.neutral + 1,
-      });
-    } else if (feedbackType === 'bad') {
-      setFeedback({
-        ...feedback,
-        bad: feedback.bad + 1,
-      });
-    } else if (feedbackType === 'reset') {
-      setFeedback({
-        ...feedback,
-        good: 0,
-        neutral: 0,
-        bad: 0,
-      });
-    }
-  };
-
-  const totalFeedback = Object.values(feedback).reduce(
-    (prev, currentValue) => prev + currentValue,
-    0
-  );
-
-  const totalGoodPercentage = Math.round(
-    ((feedback.good + feedback.neutral) / totalFeedback) * 100
-  );
+  // Щоб використати дані з локального сховища в setContacts передаємо callback функцію і з неї повертаємо дані з локального сховища або пустий масив.
+  // Пропоную використати useEffect в масиві залежностей якого буде лише contacts для збереження даних в локальне сховище.
 
   return (
     <>
-      <Description />
-
-      <Options updateFeedback={updateFeedback} totalFeedback={totalFeedback} />
-
-      {totalFeedback === 0 ? (
-        <Notification />
-      ) : (
-        <Feedback
-          numberOfGood={feedback.good}
-          numberOfNeutral={feedback.neutral}
-          numberOfBad={feedback.bad}
-          totalFeedback={totalFeedback}
-          totalGoodPercentage={totalGoodPercentage}
-        />
-      )}
+      <h1>Phonebook</h1>
+      <ContactList initialContacts={initialContacts} />
     </>
   );
 }

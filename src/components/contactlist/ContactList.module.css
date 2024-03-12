@@ -1,0 +1,9 @@
+.contactListContainer {
+    padding-top: 30px;
+}
+
+.contactListListElement {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
