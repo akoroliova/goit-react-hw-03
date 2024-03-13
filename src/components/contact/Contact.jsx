@@ -1,13 +1,8 @@
-// import { useId } from 'react';
-//import PropTypes from 'prop-types';
 import css from './Contact.module.css';
 import { LuCat } from 'react-icons/lu';
 import { LuPhone } from 'react-icons/lu';
 
-const Contact = ({ name, number }) => {
-  //   const nameFieldId = useId();
-  //   const numberFieldId = useId();
-
+const Contact = ({ contactId, name, number, onDelete }) => {
   return (
     <div className={css.contactCardContainer}>
       <ul className={css.contactDataListElement}>
@@ -25,18 +20,15 @@ const Contact = ({ name, number }) => {
         </li>
       </ul>
       <div className={css.contactDeleteButtonContainer}>
-        <button className={css.buttonDelete}>Delete</button>
+        <button
+          className={css.buttonDelete}
+          onClick={() => onDelete(contactId)}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
 };
-
-// Contact.propTypes = {
-//   name: PropTypes.string,
-//   tag: PropTypes.string.isRequired,
-//   location: PropTypes.string,
-//   image: PropTypes.string,
-//   stats: PropTypes.object,
-// };
 
 export default Contact;
