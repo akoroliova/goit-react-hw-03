@@ -2,18 +2,26 @@ import './App.css';
 import ContactForm from '../contactform/ContactForm.jsx';
 import SearchBox from '../searchbox/SearchBox.jsx';
 import ContactList from '../contactlist/ContactList.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
-  // Щоб використати дані з локального сховища в setContacts передаємо callback функцію і з неї повертаємо дані з локального сховища або пустий масив.
-  // Пропоную використати useEffect в масиві залежностей якого буде лише contacts для збереження даних в локальне сховище.
+  const [contacts, setContacts] = useState(() => {
+    const savedFeedbackObject = window.localStorage.getItem(
+      'saved-contacts-object'
+    );
+    if (savedFeedbackObject !== null) {
+      return JSON.parse(savedFeedbackObject);
+    }
+    return [];
+  });
 
-  // Застосунок повинен зберігати масив контактів між оновленням сторінки в локальному сховищі. Використовуй ефекти.
+  useEffect(() => {
+    window.localStorage.setItem(
+      'saved-contacts-object',
+      JSON.stringify(contacts)
+    );
+  }, [contacts]);
 
-  //   Під час додавання та видалення контакту контакти зберігаються у локальне сховище.
-  //   Під час завантаження застосунку контакти, якщо такі є, зчитуються з локального сховища і записуються у стан.
-
-  const [contacts, setContacts] = useState([]);
   const addContact = newContact => {
     setContacts(prevContacts => {
       return [...prevContacts, newContact];

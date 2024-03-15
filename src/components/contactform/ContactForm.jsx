@@ -1,38 +1,59 @@
 import css from './ContactForm.module.css';
 import { useId } from 'react';
-//Форму обов'язково створи за допомогою бібліотеки Formik.
-//Додай валідацію полів форми бібліотекою Yup та виведи повідомлення про помилки:
-// поля повинні бути обов'язковими для заповнення
-// мінімальна кількість символів - 3
-// максимальна кількість символів - 50
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { nanoid } from 'nanoid';
+
+const YupSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+
+  number: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+});
 
 export default function ContactForm({ onAdd }) {
-  //Для генерації ідентифікаторів використовуй будь-який відповідний пакет, наприклад nanoid.
-  const contactId = Date.now();
+  const contactId = nanoid();
   const nameId = useId();
   const numberId = useId();
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = (values, actions) => {
     onAdd({
       id: contactId,
-      name: e.target.elements.name.value,
-      number: e.target.elements.number.value,
+      name: values.name,
+      number: values.number,
     });
-    e.target.reset();
+    actions.resetForm();
   };
 
   return (
-    <form className={css.contactForm} onSubmit={handleSubmit}>
-      <label htmlFor={nameId}>Name</label>
-      <input className={css.inputField} type="text" name="name" />
+    <Formik
+      initialValues={{
+        name: '',
+        number: '',
+      }}
+      onSubmit={handleSubmit}
+      validationSchema={YupSchema}
+    >
+      {({ errors, touched }) => (
+        <Form className={css.contactForm}>
+          <label htmlFor={nameId}>Name</label>
+          <Field type="text" name="name" className={css.inputField} />
+          {errors.name && touched.name ? <div>{errors.name}</div> : null}
 
-      <label htmlFor={numberId}>Number</label>
-      <input className={css.inputField} type="text" name="number" />
+          <label htmlFor={numberId}>Number</label>
+          <Field type="text" name="number" className={css.inputField} />
+          {errors.number && touched.number ? <div>{errors.number}</div> : null}
 
-      <div className={css.contactAddButtonContainer}>
-        <button type="submit">Add contact</button>
-      </div>
-    </form>
+          <div className={css.contactAddButtonContainer}>
+            <button type="submit">Add contact</button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 }
