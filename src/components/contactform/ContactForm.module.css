@@ -11,3 +11,7 @@
 .contactAddButtonContainer {
     margin: auto;
 }
+
+.errorText {
+    color: red;
+}

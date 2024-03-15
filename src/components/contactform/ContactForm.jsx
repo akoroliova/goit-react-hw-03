@@ -43,11 +43,15 @@ export default function ContactForm({ onAdd }) {
         <Form className={css.contactForm}>
           <label htmlFor={nameId}>Name</label>
           <Field type="text" name="name" className={css.inputField} />
-          {errors.name && touched.name ? <div>{errors.name}</div> : null}
+          {errors.name && touched.name ? (
+            <div className={css.errorText}>{errors.name}</div>
+          ) : null}
 
           <label htmlFor={numberId}>Number</label>
           <Field type="text" name="number" className={css.inputField} />
-          {errors.number && touched.number ? <div>{errors.number}</div> : null}
+          {errors.number && touched.number ? (
+            <div className={css.errorText}>{errors.number}</div>
+          ) : null}
 
           <div className={css.contactAddButtonContainer}>
             <button type="submit">Add contact</button>
